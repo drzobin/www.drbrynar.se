@@ -1,0 +1,6 @@
+create database www_drbrynar_se;
+\connect www_drbrynar_se
+CREATE SCHEMA www_drbrynar_se;
+CREATE USER www_drbrynar_se PASSWORD 'password';
+GRANT ALL ON SCHEMA www_drbrynar_se TO www_drbrynar_se;
+GRANT ALL ON ALL TABLES IN SCHEMA www_drbrynar_se TO www_drbrynar_se;
