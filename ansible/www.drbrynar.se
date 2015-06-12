@@ -1,0 +1,37 @@
+---
+- hosts: www.drbrynar.se
+  sudo: True
+  user: root
+  tasks:
+   - name: Install vim
+     apt: pkg=vim state=installed update_cache=true
+
+   - name: Install apache2
+     apt: pkg=apache2 state=installed update_cache=true
+
+   - name: Install python-pip
+     apt: pkg=python-pip state=installed update_cache=true
+
+   - name: Install postgresql
+     apt: pkg=postgresql state=installed update_cache=true
+
+   - name: Install postgresql-server-dev-all
+     apt: pkg=postgresql-server-dev-all state=installed update_cache=true
+
+   - name: Install libpython-dev
+     apt: pkg=libpython-dev state=installed update_cache=true
+
+   - name: Install postgresql-client
+     apt: pkg=postgresql-client state=installed update_cache=true
+
+   - name: Install postgresql-contrib
+     apt: pkg=postgresql-contrib state=installed update_cache=true
+
+   - name: Run pip install -U psycopg2
+     command: pip install -U psycopg2
+
+   - name: Run pip install Flask-SQLAlchemy
+     command: pip install Flask-SQLAlchemy
+
+   - name: Run pip install Flask
+     command: pip install Flask
