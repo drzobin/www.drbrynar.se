@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='justified-nav.css') }}">
+    <script src="{{ url_for('static', filename='jquery.min.js')  }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js')  }}"></script>
+    <title>www.drbrynar.se</title>
+    {% endblock %}
+  </head>
+  <body>
+      <div class="container">
+      <div class="masthead">
+        <h3 class="text-muted">www.drbrynar.se</h3>
+        <div role="navigation">
+          <ul class="nav nav-justified">
+            <li class="active"><a href="/">Start</a></li>
+            <li><a href="/upload">Upload picture</a></li>
+            {% if not g.user.is_authenticated()%}
+            <li><a href="/register">Register</a></li>
+            <li><a href="/login">Login</a></li>
+            {% endif %}
+            {% if g.user.is_authenticated()%}
+            <li><a href="/logout">Logout</a></li>
+            {% endif %}
+          </ul>
+          </div>
+        </div>
+      </div>
+      <div class="jumbotron">
+        <div id="content">{% block content %}{% endblock %}</div>
+      </div>
+    <div id="footer">
+      {% block footer %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
+
