@@ -1,1 +1,1 @@
-QLALCHEMY_DATABASE_URI = "postgresql://www_drbrynar_se:password@localhost/www_drbrynar_se"
+SQLALCHEMY_DATABASE_URI = "postgresql://www_drbrynar_se:password@localhost/www_drbrynar_se"
