@@ -8,16 +8,12 @@ import hashlib, datetime, random, os
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
-#this should be changed
-app.secret_key = "TooriwohNo0Areizidie0SiezaiseiNgiehahFaciengooke0Hahphaengoo2Ju0"
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-#this should be changed
-salt = "Veiju8ivahnavoopah7oovee4daiwaidoxaih4Iecoo0eejaobei6wi9eid7zuep"
 app.config['UPLOAD_FOLDER'] = 'static/pictures/'
 app.config['ALLOWED_EXTENSIONS'] = set(['tiff','jpeg','jpg','png','img','tif','gif','bmp'])
 
@@ -42,6 +38,7 @@ def load_user(id):
 @app.route("/")
 def start():
   if request.method == 'GET':
+    print app.config["USER_PW_SALT"]
     db.session.add(Logg("GET start", request.remote_addr,request.user_agent.string))
     db.session.commit()
     rand = random.randrange(0, db.session.query(Picture).count()) 
@@ -82,7 +79,7 @@ def login():
     db.session.add(Logg("POST login", request.remote_addr,request.user_agent.string))
     db.session.commit()
     if request.form["email"] and request.form["password"]:
-      hashed_password = hashlib.sha512(request.form["password"] + salt).hexdigest()
+      hashed_password = hashlib.sha512(request.form["password"] + app.config["USER_PW_SALT"]).hexdigest()
       users = db.session.query(User).filter(User.email == request.form["email"], User.password == hashed_password).first()
       if users is None:
         db.session.add(Logg("POST login failed login with email: " + request.form["email"] + " password: " + request.form["password"], request.remote_addr,request.user_agent.string))
@@ -119,7 +116,7 @@ def register():
       db.session.commit()
       return render_template('error.html', error_message = "Empty form")
     if request.form["password1"] == request.form["password2"]:
-      hashed_password = hashlib.sha512(request.form["password1"] + salt).hexdigest()
+      hashed_password = hashlib.sha512(request.form["password1"] + app.config["USER_PW_SALT"]).hexdigest()
       db.session.add(User(request.form["email"], hashed_password))
       db.session.commit()
       db.session.add(Logg("POST register sussesfully register email: " + request.form["email"]  + " password: " + request.form["password1"], request.remote_addr,request.user_agent.string))
