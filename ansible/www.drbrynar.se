@@ -35,3 +35,6 @@
 
    - name: Run pip install Flask
      command: pip install Flask
+
+   - name: Run pip install image
+     command: pip install image
