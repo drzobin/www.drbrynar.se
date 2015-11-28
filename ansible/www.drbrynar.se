@@ -38,3 +38,6 @@
 
    - name: Run pip install image
      command: pip install image
+
+   - name: Run pip install flask-recaptcha
+     command: pip install flask-recaptcha

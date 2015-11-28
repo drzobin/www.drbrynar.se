@@ -4,11 +4,13 @@ from models import Base, User, Picture, Logg
 from flask.ext.login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
+from flask_recaptcha import ReCaptcha
 import hashlib, datetime, random, os
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 db = SQLAlchemy(app)
+recaptcha = ReCaptcha(app=app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
