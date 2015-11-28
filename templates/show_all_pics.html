@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Show all pictures</h1>
+<center>
+{% for pic in pics %}
+<p>
+<img src="{{ url_for('static', filename ="pictures/" + pic.filename) }}" alt="picture" class="img-responsive">
+</p>
+{% endfor %}
+</center>
+{% endblock %}
+
