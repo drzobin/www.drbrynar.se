@@ -38,13 +38,21 @@ def load_user(id):
 @app.route("/")
 def start():
   if request.method == 'GET':
-    print app.config["USER_PW_SALT"]
     db.session.add(Logg("GET start", request.remote_addr,request.user_agent.string))
     db.session.commit()
     rand = random.randrange(0, db.session.query(Picture).count()) 
     pic_row = db.session.query(Picture)[rand]
     pic_filename = url_for('static', filename ="pictures/" + pic_row.filename)
     return render_template('start.html', pic_url = pic_filename)
+
+@app.route("/show_all_pics")
+def show_all_pics():
+  if request.method == 'GET':
+    db.session.add(Logg("GET show_all", request.remote_addr,request.user_agent.string))
+    db.session.commit()
+    pics = db.session.query(Picture).all()
+    return render_template('show_all_pics.html',pics = pics)
+
 
 @app.route("/upload", methods=['POST', 'GET'])
 @app.route("/u", methods=['POST', 'GET'])
