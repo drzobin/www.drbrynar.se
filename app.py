@@ -19,8 +19,12 @@ login_manager.login_view = 'login'
 
 images = Images(app)
 
+#folder to save uploaded files to
 app.config['UPLOAD_FOLDER'] = '/opt/www.drbrynar.se/static/pictures/'
+#allowed file exstenstion when uploading a file
 app.config['ALLOWED_EXTENSIONS'] = set(['tiff','jpeg','jpg','png','img','tif','gif','bmp'])
+#max size of the uploaded files
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 def allowed_file(filename):
   return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
