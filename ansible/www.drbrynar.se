@@ -27,6 +27,9 @@
    - name: Install postgresql-contrib
      apt: pkg=postgresql-contrib state=installed update_cache=true
 
+   - name: Install libjpeg-dev
+     apt: pkg=libjpeg-dev state=installed update_cache=true
+
    - name: Run pip install -U psycopg2
      command: pip install -U psycopg2
 
@@ -41,3 +44,6 @@
 
    - name: Run pip install flask-recaptcha
      command: pip install flask-recaptcha
+
+   - name: Run pip install flask-images
+     command: pip install flask-images

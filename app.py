@@ -5,6 +5,7 @@ from flask.ext.login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from flask_recaptcha import ReCaptcha
+from flask.ext.images import Images
 import hashlib, datetime, random, os
 
 app = Flask(__name__)
@@ -16,7 +17,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-app.config['UPLOAD_FOLDER'] = 'static/pictures/'
+images = Images(app)
+
+app.config['UPLOAD_FOLDER'] = '/opt/www.drbrynar.se/static/pictures/'
 app.config['ALLOWED_EXTENSIONS'] = set(['tiff','jpeg','jpg','png','img','tif','gif','bmp'])
 
 def allowed_file(filename):
@@ -44,8 +47,8 @@ def start():
     db.session.commit()
     rand = random.randrange(0, db.session.query(Picture).count()) 
     pic_row = db.session.query(Picture)[rand]
-    pic_filename = url_for('static', filename ="pictures/" + pic_row.filename)
-    return render_template('start.html', pic_url = pic_filename)
+    #pic_filename = url_for('static', filename ="pictures/" + pic_row.filename)
+    return render_template('start.html', pic = pic_row)
 
 @app.route("/show_all_pics")
 def show_all_pics():
@@ -70,6 +73,8 @@ def upload():
     file = request.files['file']
     if file and allowed_file(file.filename):
       filename = secure_filename(file.filename)
+      if os.path.exists(app.config['UPLOAD_FOLDER'] + "/" + filename):
+        return render_template('error.html', error_message = "You need to choose another filename :(")
       db.session.add(Picture(2, filename, request.remote_addr,request.user_agent.string))
       db.session.commit()
       file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -125,6 +130,10 @@ def register():
       db.session.add(Logg("POST registeri empty form", request.remote_addr,request.user_agent.string))
       db.session.commit()
       return render_template('error.html', error_message = "Empty form")
+    if not recaptcha.verify():
+      db.session.add(Logg("POST registeri recaptcha failed", request.remote_addr,request.user_agent.string))
+      db.session.commit()
+      return render_template('error.html', error_message = "You are not a human")
     if request.form["password1"] == request.form["password2"]:
       hashed_password = hashlib.sha512(request.form["password1"] + app.config["USER_PW_SALT"]).hexdigest()
       db.session.add(User(request.form["email"], hashed_password))
@@ -138,5 +147,6 @@ def register():
       return render_template('error.html', error_message = "Passwords do not match")
 
 if __name__ == "__main__":
-  app.debug = True
-  app.run(host='0.0.0.0')
+  #app.debug = True
+  app.debug = False
+  app.run(host='0.0.0.0',port=80)
