@@ -3,8 +3,15 @@
 <h1>Start</h1>
 <center>
 {% if pic %}
-<img src="{{ url_for('images', filename ="pictures/" + pic.filename,width=400, height=400, mode='crop', quality=95) }}" alt="picture" class="img-responsive">
+<img src="{{ url_for('images', filename ="pictures/" + pic.id_as_str(),width=400, height=400, mode='crop', quality=95) }}" alt="picture" class="img-responsive">
 {% endif %}
+
+{% if pic.description != "none" %}
+<p>
+{{ pic.description }}
+</p>
+{% endif %}
+
 </center>
 {% endblock %}
 
