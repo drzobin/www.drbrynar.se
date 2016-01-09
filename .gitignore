@@ -58,3 +58,6 @@ target/
 
 # www.drbrnar.se static files that should be uniq for every env
 config.py
+
+# uploaded pictures
+static/pictures/
